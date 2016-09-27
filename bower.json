@@ -1,5 +1,5 @@
 {
-  "name": "ToulouseLights",
+  "name": "toulouse-lights",
   "homepage": "https://github.com/laurent35240/toulouse-lights",
   "authors": [
     "Laurent Clouet <laurent35240@gmail.com>"
@@ -21,6 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "glayers.leaflet": "sumbera/glayers.leaflet#~1.0.1"
+    "glayers.leaflet": "sumbera/glayers.leaflet#~1.0.1",
+    "leaflet": ">= 1.0.0"
   }
 }
