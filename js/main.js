@@ -1,8 +1,14 @@
-var toulouseMap = L.map('toulouseMap').setView([43.604482, 1.443962], 13);
+var minZoom = 13;
+var maxZoom = 18;
+
+var minRadius = 1;
+var maxRadius = 13;
+
+var toulouseMap = L.map('toulouseMap').setView([43.604482, 1.443962], minZoom);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGF1cmVudDM1MjQwIiwiYSI6ImNpdDc5NzFmMTAwMHoyeHBoMDV4dWxsaWgifQ.ddKkXiiw-IGruDUQeQjllg', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
+    maxZoom: maxZoom,
     id: 'laurent35240',
     accessToken: 'pk.eyJ1IjoibGF1cmVudDM1MjQwIiwiYSI6ImNpdDc5NzFmMTAwMHoyeHBoMDV4dWxsaWgifQ.ddKkXiiw-IGruDUQeQjllg'
 }).addTo(toulouseMap);
@@ -20,11 +26,12 @@ function fetchAndProcessData(processFunction, ctx, canvasOverlay, canvasWidth, c
 }
 
 function drawJsonData(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
+    var zoom = canvasOverlay._map.getZoom();
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = "rgba(255,116,0, 0.2)";
-    var ambientLight = .01;
+    var ambientLight = .03;
     var intensity = 1;
-    var radius = 1;
+    var radius = minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom);
     var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
 
     var coord, g;
