@@ -1,0 +1,26 @@
+{
+  "name": "ToulouseLights",
+  "homepage": "https://github.com/laurent35240/toulouse-lights",
+  "authors": [
+    "Laurent Clouet <laurent35240@gmail.com>"
+  ],
+  "description": "Map of Toulouse Lights",
+  "main": "index.html",
+  "keywords": [
+    "map",
+    "toulouse",
+    "lights",
+    "leaflet"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "glayers.leaflet": "sumbera/glayers.leaflet#~1.0.1"
+  }
+}

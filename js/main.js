@@ -15,6 +15,10 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/
 
 var jsonData;
 
+L.canvasLayer()
+    .delegate(this) // -- if we do not inherit from L.CanvasLayer we can setup a delegate to receive events from L.CanvasLayer
+    .addTo(toulouseMap);
+
 function fetchAndProcessData(processFunction, ctx, canvasOverlay, canvasWidth, canvasHeight) {
     fetch('points-lumineux.json')
         .then(function (response) {
@@ -54,16 +58,13 @@ function drawJsonData(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
     ctx.fillRect(0,0,canvasWidth, canvasHeight);
 }
 
-function drawingOnCanvas(canvasOverlay, params) {
-    var ctx = params.canvas.getContext('2d');
+function onDrawLayer(info) {
+    var ctx = info.canvas.getContext('2d');
 
     if (typeof jsonData == 'undefined') {
-        fetchAndProcessData(drawJsonData, ctx, canvasOverlay, params.canvas.width, params.canvas.height);
+        fetchAndProcessData(drawJsonData, ctx, info.layer, info.canvas.width, info.canvas.height);
     } else {
-        drawJsonData(jsonData, ctx, canvasOverlay, params.canvas.width, params.canvas.height);
+        drawJsonData(jsonData, ctx, info.layer, info.canvas.width, info.canvas.height);
     }
 }
 
-L.canvasOverlay()
-    .drawing(drawingOnCanvas)
-    .addTo(toulouseMap);
