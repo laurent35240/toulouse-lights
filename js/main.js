@@ -35,7 +35,7 @@ function drawJsonData(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
     ctx.fillStyle = "rgba(255,116,0, 0.2)";
     var ambientLight = .03;
     var intensity = 1;
-    var radius = minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom);
+    var radius = Math.max(minRadius, minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom));
     var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
 
     var coord, g;
