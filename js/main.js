@@ -60,37 +60,3 @@ function drawingOnCanvas(canvasOverlay, params) {
 L.canvasOverlay()
     .drawing(drawingOnCanvas)
     .addTo(toulouseMap);
-
-/**var can = document.getElementById('toulouseLights');
-var ctx = can.getContext('2d');
-
-var ambientLight = .1;
-var intensity = 1;
-var radius = 1;
-var canvasHeight = 600;
-var canvasWidth = 1600;
-var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
-
-fetch('points-lumineux.json')
-    .then(function (response) {
-        return response.json().then(function (json) {
-            var coord, x, y, g;
-            var mapBounds = toulouseMap.getBounds();
-            for (var i=0; i<json.length; i++) {
-                coord = json[i].geometry.coordinates;
-
-                x = (coord[0] - mapBounds.getWest()) / (mapBounds.getEast() - mapBounds.getWest()) * canvasWidth;
-                y = (coord[1] - mapBounds.getNorth()) / (mapBounds.getSouth() - mapBounds.getNorth()) * canvasHeight;
-                g = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
-                g.addColorStop(0, amb);
-                ctx.fillStyle = g;
-                ctx.fillRect(x-radius, y-radius, 2*radius, 2*radius);
-            }
-        })
-    });
-
-ctx.fillStyle = amb;
-ctx.globalCompositeOperation = 'xor';
-ctx.fillRect(0,0,canvasWidth,canvasHeight);
-*/
