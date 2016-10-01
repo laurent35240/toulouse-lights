@@ -20,7 +20,7 @@ L.canvasLayer()
     .addTo(toulouseMap);
 
 function fetchAndProcessData(processFunction, ctx, canvasOverlay, canvasWidth, canvasHeight) {
-    fetch('points-lumineux.json')
+    fetch('data/light-coordinates.json')
         .then(function (response) {
             return response.json().then(function (json) {
                 jsonData = json;
@@ -40,7 +40,7 @@ function drawJsonData(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
 
     var coord, g;
     for (var i=0; i<json.length; i++) {
-        coord = json[i].geometry.coordinates;
+        coord = json[i];
 
         dot = canvasOverlay._map.latLngToContainerPoint(L.latLng(coord[1], coord[0]));
 
