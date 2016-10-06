@@ -15,6 +15,8 @@ image.onload = function () {
 };
 image.src = 'data/croix-occitane.jpg';
 
+var displayImgInMap = false;
+
 // MAP Part
 var toulouseMap = L.map('toulouseMap').setView([43.604482, 1.443962], minZoom);
 
@@ -26,10 +28,13 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/
 }).addTo(toulouseMap);
 
 var firstMapBounds = toulouseMap.getBounds();
+var distNorthSouth = firstMapBounds.getNorth() - firstMapBounds.getSouth(); // Equivalent to image height AND width
+var distEastWest = firstMapBounds.getEast() - firstMapBounds.getWest();
 
 var jsonData;
 
-L.canvasLayer()
+var canvasLayer = L.canvasLayer();
+canvasLayer
     .delegate(this) // -- if we do not inherit from L.CanvasLayer we can setup a delegate to receive events from L.CanvasLayer
     .addTo(toulouseMap);
 
@@ -53,22 +58,23 @@ function drawJsonData(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
     var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
     var pixelData;
 
-    var coord, g, dot, xCoordPixel, yCoordPixel;
+    var coord, g, dot, xCoordPixel, yCoordPixel, showLight;
     for (var i=0; i<json.length; i++) {
         coord = json[i];
 
         dot = canvasOverlay._map.latLngToContainerPoint(L.latLng(coord[1], coord[0]));
 
-
         if (dot.x >= 0 && dot.x <= canvasWidth && dot.y >= 0 && dot.y <= canvasHeight) {
-            var distNorthSouth = firstMapBounds.getNorth() - firstMapBounds.getSouth(); // Equivalent to image height AND width
-            var distEastWest = firstMapBounds.getEast() - firstMapBounds.getWest();
-
-            // I do not know why this formula but it seems that it's working
-            xCoordPixel = (coord[0] - distEastWest/2 + distNorthSouth/2 - firstMapBounds.getWest()) / distNorthSouth/Math.sqrt(2) * imageCanvas.width + imageCanvas.width/8;
-            yCoordPixel = (coord[1] - firstMapBounds.getSouth()) / distNorthSouth * imageCanvas.height;
-            pixelData = imageCanvas.getContext('2d').getImageData(xCoordPixel,yCoordPixel,1,1).data;
-            if (pixelData[3] == 255) {
+            if (displayImgInMap) {
+                // I do not know why this formula but it seems that it's working
+                xCoordPixel = (coord[0] - distEastWest/2 + distNorthSouth/2 - firstMapBounds.getWest()) / distNorthSouth/Math.sqrt(2) * imageCanvas.width + imageCanvas.width/8;
+                yCoordPixel = (coord[1] - firstMapBounds.getSouth()) / distNorthSouth * imageCanvas.height;
+                pixelData = imageCanvas.getContext('2d').getImageData(xCoordPixel,yCoordPixel,1,1).data;
+                showLight = (pixelData[3] == 255);
+            } else {
+                showLight = true;
+            }
+            if (showLight) {
                 g = ctx.createRadialGradient(dot.x, dot.y, 0, dot.x, dot.y, radius);
                 g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
                 g.addColorStop(0, amb);
@@ -93,3 +99,8 @@ function onDrawLayer(info) {
     }
 }
 
+// Handling clicking on link
+$('#crossLink').click(function () {
+    displayImgInMap = !displayImgInMap;
+    canvasLayer.drawLayer();
+});
