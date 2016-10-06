@@ -102,7 +102,29 @@ var myCanvasLayer = new canvasLayer();
 myCanvasLayer.addTo(toulouseMap);
 
 // Handling clicking on link
-$('#crossLink').click(function () {
+$('#crossLink').click(function (e) {
     displayImgInMap = !displayImgInMap;
     myCanvasLayer.drawLayer();
+    e.preventDefault();
+});
+
+// Handling music
+var song = new Audio('data/come.mp3');
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var analyser = audioCtx.createAnalyser();
+//source = audioCtx.createMediaElementSource(song);
+//source.connect(analyser);
+analyser.fftSize = 2048;
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+
+$('#songLink').click(function (e) {
+    if (song.paused) {
+        song.play();
+        /*analyser.getByteTimeDomainData(dataArray);
+        console.log(dataArray);*/
+    } else {
+        song.pause();
+    }
+    e.preventDefault();
 });
