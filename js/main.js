@@ -112,8 +112,9 @@ $('#crossLink').click(function (e) {
 var song = new Audio('data/come.mp3');
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var analyser = audioCtx.createAnalyser();
-//source = audioCtx.createMediaElementSource(song);
-//source.connect(analyser);
+source = audioCtx.createMediaElementSource(song);
+source.connect(analyser);
+source.connect(audioCtx.destination);
 analyser.fftSize = 2048;
 var bufferLength = analyser.frequencyBinCount;
 var dataArray = new Uint8Array(bufferLength);
