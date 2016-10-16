@@ -47,7 +47,6 @@ canvasLayer = function () {
     this.drawJsonData = function(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
         var zoom = canvasOverlay._map.getZoom();
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        ctx.fillStyle = "rgba(255,116,0, 0.2)";
         var ambientLight = .03;
         var intensity = 1;
         var radius = Math.max(minRadius, minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom));
