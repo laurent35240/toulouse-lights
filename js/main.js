@@ -52,6 +52,7 @@ canvasLayer = function () {
         var radius = Math.max(minRadius, minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom));
         var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
         var pixelData;
+        var useCircle = false;
 
         var coord, g, dot, xCoordPixel, yCoordPixel, showLight;
         for (var i=0; i<json.length; i++) {
@@ -74,7 +75,14 @@ canvasLayer = function () {
                     g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
                     g.addColorStop(0, amb);
                     ctx.fillStyle = g;
-                    ctx.fillRect(dot.x-radius, dot.y-radius, 2*radius, 2*radius);
+                    if (useCircle) {
+                        ctx.beginPath();
+                        ctx.arc(dot.x, dot.y, radius, 0, 2 * Math.PI);
+                        ctx.fill();
+                    } else {
+                        ctx.fillRect(dot.x-radius, dot.y-radius, 2*radius, 2*radius);
+                    }
+
                 }
             }
         }
