@@ -1,8 +1,8 @@
 var minZoom = 13;
 var maxZoom = 18;
 
-var minRadius = 1;
-var maxRadius = 13;
+var minRadius = 0.5;
+var maxRadius = 16;
 
 var centerLatLng = [43.604482, 1.443962];
 
@@ -57,6 +57,7 @@ canvasLayer = function () {
         var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';
         var pixelData;
         var useCircle = false;
+        var useGradient = (radius > 2);
         var useRandomizer = false;
         var randomizerPercentOff = 10;
 
@@ -78,7 +79,11 @@ canvasLayer = function () {
                 }
                 if (useSoundInMap && showLight) {
                     distanceToCenter = canvasOverlay._map.distance(centerLatLng, coordLatLng);
-                    showLight = ((distanceToCenter * 0.03) < soundAverage);
+                    showLight = ((distanceToCenter * 0.03 + 50) < soundAverage);
+                    // We always display a core center
+                    if (!showLight && distanceToCenter < 100) {
+                        showLight = true;
+                    }
                 }
                 if (useRandomizer && showLight) {
                     randNumber = Math.random();
@@ -91,10 +96,12 @@ canvasLayer = function () {
                         ctx.fillStyle = 'rgba(0,0,0,0.9)';
                         ctx.fill();
                     } else {
-                        g = ctx.createRadialGradient(dot.x, dot.y, 0, dot.x, dot.y, radius);
-                        g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
-                        g.addColorStop(0, amb);
-                        ctx.fillStyle = g;
+                        if (useGradient) {
+                            g = ctx.createRadialGradient(dot.x, dot.y, 0, dot.x, dot.y, radius);
+                            g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
+                            g.addColorStop(0, amb);
+                            ctx.fillStyle = g;
+                        }
                         ctx.fillRect(dot.x-radius, dot.y-radius, 2*radius, 2*radius);
                     }
 
@@ -175,6 +182,8 @@ function loopAudio() {
     soundAverage = sum / bufferLength;
 }
 
-/*window.setInterval(function () {
-    myCanvasLayer.drawLayer();
-}, 1000);*/
+window.setInterval(function () {
+    if (useSoundInMap) {
+        myCanvasLayer.drawLayer();
+    }
+}, 100);
