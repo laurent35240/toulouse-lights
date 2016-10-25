@@ -4,7 +4,7 @@ var maxZoom = 18;
 var minRadius = 0.5;
 var maxRadius = 16;
 
-var centerLatLng = [43.604482, 1.443962];
+var centerLatLng = L.latLng(43.604482, 1.443962);
 
 // Image with canvas part
 var imageCanvas = document.createElement('canvas');
@@ -61,8 +61,11 @@ canvasLayer = function () {
         var useRandomizer = false;
         var randomizerPercentOff = 10;
 
-        var coord, g, dot, xCoordPixel, yCoordPixel, showLight, coordLatLng, distanceToCenter, randNumber;
+        var coord, g, dot, xCoordPixel, yCoordPixel, showLight, coordLatLng, distanceToCenter, randNumber, pointAngle;
+        var soundDataIndex;
         var startLoopTime = Date.now();
+        // Number of points that we do not take on both extremity of sound data
+        var marginSoundData = 20;
         for (var i=0; i<json.length; i++) {
             coord = json[i];
             coordLatLng = L.latLng(coord[1], coord[0]);
@@ -79,10 +82,14 @@ canvasLayer = function () {
                 }
                 if (useSoundInMap && showLight) {
                     distanceToCenter = canvasOverlay._map.distance(centerLatLng, coordLatLng);
-                    showLight = ((distanceToCenter * 0.03 + 50) < soundAverage);
                     // We always display a core center
-                    if (!showLight && distanceToCenter < 100) {
+                    if (distanceToCenter < 300) {
                         showLight = true;
+                    } else {
+                        pointAngle = Math.atan2(coordLatLng.lng - centerLatLng.lng, coordLatLng.lat - centerLatLng.lat);
+
+                        soundDataIndex = Math.floor((pointAngle + Math.PI) / (2 * Math.PI) * (bufferLength - 2*marginSoundData));
+                        showLight = ((distanceToCenter * 0.03 + 50) < soundData[soundDataIndex + marginSoundData]);
                     }
                 }
                 if (useRandomizer && showLight) {
@@ -153,7 +160,7 @@ source.connect(analyser);
 source.connect(audioCtx.destination);
 analyser.fftSize = 256;
 var bufferLength = analyser.frequencyBinCount;
-var dataArray = new Uint8Array(bufferLength);
+var soundData = new Uint8Array(bufferLength);
 
 $('#songLink').click(function (e) {
     if (song.paused) {
@@ -163,6 +170,7 @@ $('#songLink').click(function (e) {
     } else {
         song.pause();
         useSoundInMap = false;
+        myCanvasLayer.drawLayer();
     }
     e.preventDefault();
 });
@@ -171,12 +179,12 @@ var soundAverage = 0;
 function loopAudio() {
     requestAnimationFrame(loopAudio);
     // update data in frequencyData
-    analyser.getByteFrequencyData(dataArray);
+    analyser.getByteFrequencyData(soundData);
     // render frame based on values in frequencyData
     var sum = 0;
     var v;
     for(var i = 0; i < bufferLength; i++) {
-        v = dataArray[i];
+        v = soundData[i];
         sum += v;
     }
     soundAverage = sum / bufferLength;
