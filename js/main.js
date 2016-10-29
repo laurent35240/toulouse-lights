@@ -88,8 +88,12 @@ canvasLayer = function () {
                     } else {
                         pointAngle = Math.atan2(coordLatLng.lng - centerLatLng.lng, coordLatLng.lat - centerLatLng.lat);
 
-                        soundDataIndex = Math.floor((pointAngle + Math.PI) / (2 * Math.PI) * (bufferLength - 2*marginSoundData));
-                        showLight = ((distanceToCenter * 0.03 + 50) < soundData[soundDataIndex + marginSoundData]);
+                        soundDataIndex = Math.floor((pointAngle + Math.PI) / (2 * Math.PI) * (bufferLength - 2*marginSoundData) * 2);
+                        soundDataIndex = soundDataIndex + marginSoundData;
+                        if (soundDataIndex + marginSoundData >= bufferLength) {
+                            soundDataIndex = 2 * bufferLength - (soundDataIndex + 2 * marginSoundData);
+                        }
+                        showLight = ((distanceToCenter * 0.03 + 50) < soundData[soundDataIndex]);
                     }
                 }
                 if (useRandomizer && showLight) {
