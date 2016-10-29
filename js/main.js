@@ -83,7 +83,7 @@ canvasLayer = function () {
                 if (useSoundInMap && showLight) {
                     distanceToCenter = canvasOverlay._map.distance(centerLatLng, coordLatLng);
                     // We always display a core center
-                    if (distanceToCenter < 300) {
+                    if (distanceToCenter < soundAverage * 10) {
                         showLight = true;
                     } else {
                         pointAngle = Math.atan2(coordLatLng.lng - centerLatLng.lng, coordLatLng.lat - centerLatLng.lat);
