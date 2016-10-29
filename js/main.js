@@ -35,6 +35,7 @@ var distNorthSouth = firstMapBounds.getNorth() - firstMapBounds.getSouth(); // E
 var distEastWest = firstMapBounds.getEast() - firstMapBounds.getWest();
 
 var jsonData;
+var imgLightsCache = [];
 
 canvasLayer = function () {
     this.fetchAndProcessData = function(processFunction, ctx, canvasOverlay, canvasWidth, canvasHeight) {
@@ -74,11 +75,14 @@ canvasLayer = function () {
             if (dot.x >= 0 && dot.x <= canvasWidth && dot.y >= 0 && dot.y <= canvasHeight) {
                 showLight = true;
                 if (displayImgInMap) {
-                    // I do not know why this formula but it seems that it's working
-                    xCoordPixel = (coord[0] - distEastWest/2 + distNorthSouth/2 - firstMapBounds.getWest()) / distNorthSouth/Math.sqrt(2) * imageCanvas.width + imageCanvas.width/8;
-                    yCoordPixel = (coord[1] - firstMapBounds.getSouth()) / distNorthSouth * imageCanvas.height;
-                    pixelData = imageCanvas.getContext('2d').getImageData(xCoordPixel,yCoordPixel,1,1).data;
-                    showLight = (pixelData[3] == 255);
+                    if (typeof imgLightsCache[i] == 'undefined') {
+                        // I do not know why this formula but it seems that it's working
+                        xCoordPixel = (coord[0] - distEastWest/2 + distNorthSouth/2 - firstMapBounds.getWest()) / distNorthSouth/Math.sqrt(2) * imageCanvas.width + imageCanvas.width/8;
+                        yCoordPixel = (coord[1] - firstMapBounds.getSouth()) / distNorthSouth * imageCanvas.height;
+                        pixelData = imageCanvas.getContext('2d').getImageData(xCoordPixel,yCoordPixel,1,1).data;
+                        imgLightsCache[i] = (pixelData[3] == 255);
+                    }
+                    showLight = imgLightsCache[i];
                 }
                 if (useSoundInMap && showLight) {
                     distanceToCenter = canvasOverlay._map.distance(centerLatLng, coordLatLng);
