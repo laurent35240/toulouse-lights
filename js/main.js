@@ -174,7 +174,7 @@ var bufferLength = analyser.frequencyBinCount;
 var soundData = new Uint8Array(bufferLength);
 
 $('#songLink').click(function (e) {
-    if (song.paused) {
+    if (song.paused || song.ended) {
         song.play();
         loopAudio();
         useSoundInMap = true;
