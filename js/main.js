@@ -179,9 +179,19 @@ $('#songLink').click(function (e) {
     e.preventDefault();
 });
 
+var soundAverage = 0;
 function loopAudio() {
     requestAnimationFrame(loopAudio);
+    // update data in frequencyData
     analyser.getByteFrequencyData(soundData);
+    // render frame based on values in frequencyData
+    var sum = 0;
+    var v;
+    for(var i = 0; i < bufferLength; i++) {
+        v = soundData[i];
+        sum += v;
+    }
+    soundAverage = sum / bufferLength;
 }
 
 window.setInterval(function () {
