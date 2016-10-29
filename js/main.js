@@ -19,6 +19,7 @@ image.src = 'data/croix-occitane.jpg';
 
 var displayImgInMap = false;
 var useSoundInMap = false;
+var debug = false;
 
 // MAP Part
 var toulouseMap = L.map('toulouseMap').setView(centerLatLng, minZoom);
@@ -129,11 +130,13 @@ canvasLayer = function () {
         ctx.globalCompositeOperation = 'xor';
         ctx.fillRect(0,0,canvasWidth, canvasHeight);
         var endTime = Date.now();
-        console.log('Radius ' + radius);
-        console.log('Start time: ' + startTime);
-        console.log('End time: ' + endTime);
-        console.log('Loop time: ' + (endLoopTime - startLoopTime));
-        console.log('Total time: ' + (endTime - startTime));
+        if (debug) {
+            console.log('Radius ' + radius);
+            console.log('Start time: ' + startTime);
+            console.log('End time: ' + endTime);
+            console.log('Loop time: ' + (endLoopTime - startLoopTime));
+            console.log('Total time: ' + (endTime - startTime));
+        }
     };
 
     this.onDrawLayer = function(info) {
