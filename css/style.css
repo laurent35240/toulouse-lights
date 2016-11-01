@@ -1,3 +1,14 @@
 #toulouseMap {
     height: 600px;
 }
+
+.toolbar {
+    padding-top: 1em;
+}
+
+.footer {
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+}

@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Toulouse LIghts</title>
+    <title>Toulouse Lighting</title>
+    <link rel="stylesheet" href="css/bootstrap_slate.css"/>
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-    <div id="toulouseMap"></div>
-    <p>
-        <a href="#" id="crossLink">Toggle occitane cross</a>
-    </p>
-    <p>
-        <a href="#" id="songLink">Toggle music</a>
-    </p>
+    <div class="container">
+        <h1>Toulouse lighting</h1>
+        <p>Just having some fun with lights in the pink city.</p>
+
+        <div id="toulouseMap"></div>
+        <div class="btn-group toolbar">
+            <a class="btn btn-default" href="#" id="crossLink">Toggle occitane cross</a>
+            <a class="btn btn-default" href="#" id="songLink">Toggle music</a>
+        </div>
+        <footer class="footer">
+            <a href="https://github.com/laurent35240/toulouse-lights" target="_blank">Github</a> -
+            <a href="https://github.com/laurent35240/toulouse-lights#credits" target="_blank">Credits</a> -
+            <a href="https://github.com/laurent35240" target="_blank">@laurent35240</a>
+        </footer>
+    </div>
     <script src="bower_components/leaflet/dist/leaflet.js"></script>
     <script src="bower_components/glayers.leaflet/L.CanvasLayer.js"></script>
     <script src="bower_components/jquery/dist/jquery.slim.min.js"></script>
