@@ -163,7 +163,7 @@ $('#crossLink').click(function (e) {
 });
 
 // Handling music
-var song = new Audio('data/come.mp3');
+var song = new Audio('data/hope.mp3');
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var analyser = audioCtx.createAnalyser();
 source = audioCtx.createMediaElementSource(song);

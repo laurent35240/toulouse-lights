@@ -11,7 +11,7 @@ bower install
 ## Credits
  * Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>
  * Lights coordinates from [data.toulouse-metropole.fr](https://data.toulouse-metropole.fr/explore/dataset/points-lumineux/information/?location=18,43.62476,1.43294&basemap=jawg.streets)
- * Song: [Come](https://open.spotify.com/track/1YrC8s6yZWw23QxW6rfM9f) by [Jain](http://www.jain-music.com/fr/)
+ * Song: [Hope](https://open.spotify.com/track/1kjaDbJzIBjuKxF2hk6ACj) by [Kid Wise](http://www.kidwise.fr/)
  * Picture: [Occitane cross](http://www.autocollant-tuning.com/symbole-region-voiture/5854954-sticker-croix-occitane.html)
  
 ## Some useful links
