@@ -39,20 +39,22 @@ var jsonData;
 var imgLightsCache = [];
 
 canvasLayer = function () {
-    this.fetchAndProcessData = function(processFunction, ctx, canvasOverlay, canvasWidth, canvasHeight) {
+    this.fetchAndProcessData = function(processFunction, ctx, canvasOverlay, canvas) {
         fetch('data/light-coordinates.json')
             .then(function (response) {
                 return response.json().then(function (json) {
                     jsonData = json;
-                    processFunction(json, ctx, canvasOverlay, canvasWidth, canvasHeight);
+                    processFunction(json, ctx, canvasOverlay, canvas);
                 })
             });
     };
 
-    this.drawJsonData = function(json, ctx, canvasOverlay, canvasWidth, canvasHeight) {
-        var startTime = Date.now();
+    this.drawJsonData = function(json, ctx, canvasOverlay, canvas) {
+        if (debug) {
+            var startTime = Date.now();
+        }
         var zoom = canvasOverlay._map.getZoom();
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         var ambientLight = .03;
         var intensity = 1;
         var radius = Math.max(minRadius, minRadius + (maxRadius - minRadius) * (zoom - minZoom) / (maxZoom - minZoom));
@@ -65,7 +67,9 @@ canvasLayer = function () {
 
         var coord, g, dot, xCoordPixel, yCoordPixel, showLight, coordLatLng, distanceToCenter, randNumber, pointAngle;
         var soundDataIndex;
-        var startLoopTime = Date.now();
+        if (debug) {
+            var startLoopTime = Date.now();
+        }
         // Number of points that we do not take on both extremity of sound data
         var marginSoundData = 20;
         for (var i=0; i<json.length; i++) {
@@ -73,7 +77,7 @@ canvasLayer = function () {
             coordLatLng = L.latLng(coord[1], coord[0]);
             dot = canvasOverlay._map.latLngToContainerPoint(coordLatLng);
 
-            if (dot.x >= 0 && dot.x <= canvasWidth && dot.y >= 0 && dot.y <= canvasHeight) {
+            if (dot.x >= 0 && dot.x <= canvas.width && dot.y >= 0 && dot.y <= canvas.height) {
                 showLight = true;
                 if (displayImgInMap) {
                     if (typeof imgLightsCache[i] == 'undefined') {
@@ -124,13 +128,15 @@ canvasLayer = function () {
                 }
             }
         }
-        var endLoopTime = Date.now();
+        if (debug) {
+            var endLoopTime = Date.now();
+        }
 
         ctx.fillStyle = amb;
         ctx.globalCompositeOperation = 'xor';
-        ctx.fillRect(0,0,canvasWidth, canvasHeight);
-        var endTime = Date.now();
+        ctx.fillRect(0,0,canvas.width, canvas.height);
         if (debug) {
+            var endTime = Date.now();
             console.log('Radius ' + radius);
             console.log('Start time: ' + startTime);
             console.log('End time: ' + endTime);
@@ -143,9 +149,9 @@ canvasLayer = function () {
         var ctx = info.canvas.getContext('2d');
 
         if (typeof jsonData == 'undefined') {
-            this.fetchAndProcessData(this.drawJsonData, ctx, info.layer, info.canvas.width, info.canvas.height);
+            this.fetchAndProcessData(this.drawJsonData, ctx, info.layer, info.canvas);
         } else {
-            this.drawJsonData(jsonData, ctx, info.layer, info.canvas.width, info.canvas.height);
+            this.drawJsonData(jsonData, ctx, info.layer, info.canvas);
         }
     };
 };
@@ -205,4 +211,4 @@ window.setInterval(function () {
     if (useSoundInMap) {
         myCanvasLayer.drawLayer();
     }
-}, 100);
+}, 70);
